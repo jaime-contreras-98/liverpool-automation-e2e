@@ -1,18 +1,16 @@
-package com.liverpool.helpers;
+package com.liverpool.reports;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
+import com.liverpool.helpers.BaseContext;
 import com.liverpool.reports.ExtentReporterNG;
-import io.cucumber.java.Scenario;
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
-import org.testng.ITestNGListener;
 import org.testng.ITestResult;
 
 import java.io.IOException;
-//import reporter.ExtentReporterNG;
 
 public class Listeners extends BaseContext implements ITestListener {
 
@@ -22,7 +20,7 @@ public class Listeners extends BaseContext implements ITestListener {
 
     @Override
     public void onTestStart(ITestResult result) {
-        test = extentRep.createTest(result.getMethod().getMethodName()); //scenario.getName()
+        test = extentRep.createTest(result.getMethod().getMethodName()); //scenario.getName() FOR CUCUMBER
         extentThread.set(test); // each thread has it's unique id
     }
 

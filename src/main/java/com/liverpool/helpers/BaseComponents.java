@@ -1,9 +1,8 @@
 package com.liverpool.helpers;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -11,12 +10,10 @@ import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.Properties;
-import org.apache.commons.io.FileUtils;
 
 public class BaseComponents {
 
@@ -65,6 +62,16 @@ public class BaseComponents {
         wait.until(ExpectedConditions.invisibilityOfElementLocated(element));
     }
 
+    public boolean isElementPresent(WebElement elementDisplayed) {
+        boolean isElementPresent = false;
+
+        if(elementDisplayed.isDisplayed()){
+            isElementPresent = true;
+        }
+
+        return isElementPresent;
+    }
+
     public String getElementText(By element){
         return driver.findElement(element).getText();
     }
@@ -80,5 +87,4 @@ public class BaseComponents {
         return System.getProperty("user.dir") + "//reports//" + testCaseName + ".png";
     }
      */
-
 }

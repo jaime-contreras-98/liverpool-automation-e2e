@@ -15,6 +15,4 @@ public class ProductsLoc {
 
     public By productTitleLbl = By.cssSelector("div[class='product-header-container liverpool'] > h1");
     public By productPriceLbl = By.cssSelector("div[class='m-product__price-dw-promotion'] p");
-
-
 }

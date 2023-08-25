@@ -2,8 +2,6 @@ package com.liverpool.step_definitions;
 
 import com.liverpool.helpers.BaseComponents;
 import com.liverpool.helpers.World;
-import com.liverpool.page_object.locators.ResultsLoc;
-import com.liverpool.page_object.pages.ResultsPage;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -11,12 +9,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.ElementNotInteractableException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.testng.Assert;
 
 import java.io.IOException;
-import java.util.List;
 
 public class BaseSteps{
 
@@ -76,7 +70,6 @@ public class BaseSteps{
     @When("^I confirm element with (.+) using locator (.+) is not visible")
     public void i_wait_for_element_to_appear(String locatorForm, String locator){
         By locatorType = null;
-        WebElement elementToBeClicked = null;
 
         switch(locatorForm){
             case "xpath":

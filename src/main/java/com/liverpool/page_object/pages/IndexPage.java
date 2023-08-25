@@ -15,7 +15,6 @@ public class IndexPage extends BaseComponents {
 
     WebDriver driver;
     IndexLoc indexLoc;
-    ResultsLoc resultsLoc ;
     WebDriverWait wait;
 
     public IndexPage(WebDriver driver){
@@ -23,12 +22,12 @@ public class IndexPage extends BaseComponents {
         this.driver = driver;
 
         indexLoc = new IndexLoc(driver);
-        resultsLoc = new ResultsLoc(driver);
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
     public void searchProduct(String nameProduct, By elementWait){
         indexLoc.searchBarInp.sendKeys(nameProduct + Keys.ENTER);
+
         wait.until(ExpectedConditions.visibilityOfElementLocated(elementWait));
     }
 
