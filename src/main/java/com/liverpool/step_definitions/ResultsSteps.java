@@ -1,17 +1,13 @@
 package com.liverpool.step_definitions;
 
 import com.liverpool.data.Constants;
-import com.liverpool.helpers.BaseComponents;
 import com.liverpool.helpers.World;
-import com.liverpool.page_object.locators.ProductsLoc;
 import com.liverpool.page_object.locators.ResultsLoc;
 import com.liverpool.page_object.pages.ResultsPage;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 
 import java.util.List;
@@ -24,12 +20,11 @@ public class ResultsSteps {
         this.world = world;
         this.world.resultsPage = new ResultsPage(world.driver);
         this.world.resultsLoc = new ResultsLoc(world.driver);
-        this.world.productsLoc = new ProductsLoc(world.driver);
     }
 
     @When("validate the amount of products is greater than {int}")
     public void i_validate_the_amount_of_products_is_greater_than(int numProducts) {
-        int total_products = this.world.resultsPage.iterateInList(this.world.resultsLoc.productElements, Constants.PS5[0], Constants.PS5[1]);
+        int total_products = this.world.resultsPage.iterateInList(this.world.resultsLoc.productsNameList, Constants.PS5[0], Constants.PS5[1]);
 
         Assert.assertTrue(total_products >= numProducts);
     }
@@ -47,7 +42,64 @@ public class ResultsSteps {
         world.resultsPage.iterateListAndClickOnElement(productElementsList, productName);
     }
 
-    /*
+    @When("I validate the {string} element is being displayed")
+    public void i_validate_presence_of_element(String object) {
+        boolean elementPresence = false;
+        world.baseComps.waitForElement(By.xpath("(//div[@class='m-plp__filterSection '] /div[@class='plp-filter-options active'])[6]"));
+
+        if(object.equalsIgnoreCase("price section")){
+            elementPresence = world.baseComps.isElementPresent(world.resultsLoc.priceFilters);
+        } else if(object.equalsIgnoreCase("all sizes button")){
+            elementPresence = world.baseComps.isElementPresent(world.resultsLoc.showAllSizesBtn);
+        }
+
+        Assert.assertTrue(elementPresence);
+    }
+
+    @When("I click on {string} filter checkbox and validate is checked")
+    public void i_check_on_numInches_filter(String numInches){
+        WebElement check = world.resultsPage.iterateOnListAndCheck(world.resultsLoc.sizeCheckboxesList,
+                "div > label", "div > div > input", numInches);
+
+        Assert.assertTrue(check.isSelected());
+    }
+
+    @When("I click on {string} filter on {string}")
+    public void i_click_on_filter(String sectionFilter, String filterName){
+        if(sectionFilter.equalsIgnoreCase("prices")){
+            world.resultsPage.iterateOnListAndCheck(world.resultsLoc.priceRangesList, "label", "input", filterName);
+        }
+    }
+
+    @Then("I validate product results number is less or equal than {int}")
+    public void i_validate_products_results_number_amount(int number){
+        String totalProductsTxt = world.resultsLoc.totalProductsLbl.getText().split(" ")[0];
+        int numProductsTxt = Integer.parseInt(totalProductsTxt);
+
+        Assert.assertTrue(numProductsTxt <= number);
+    }
+
+    @When("I hover on element with text {string}")
+    public void i_hover_and_click_on_element(String elementName){
+        if(elementName.equalsIgnoreCase("categorías")){
+            world.resultsPage.iterateOnListAndHover(world.resultsLoc.mainDivsSectionsList, "li > span",elementName);
+        } else if(elementName.equalsIgnoreCase("belleza")){
+            world.resultsPage.iterateOnListAndHover(world.resultsLoc.categoriesSectionsList, "li",elementName);
+        }
+    }
+
+    @When("^I sort products by \"([^\"]*)\"$")
+    public void i_sort_products_by_string(String sortBy){
+        world.resultsPage.sortBy(sortBy);
+    }
+
+    @When("^I iterate and click on element (.+) from list")
+    public void i_iterate_and_click_on_element_from_list(String perfume){
+        if(perfume.equals("DIOR")){
+            world.resultsPage.iterateOnList();
+        }
+    }
+        /*
     @Then("validate product {string}")
     public void i_validate_product_property(String productProperty){
         String getProductProperty = "";
@@ -67,62 +119,4 @@ public class ResultsSteps {
         }
     }
      */
-
-    @When("I validate the {string} element is being displayed")
-    public void i_validate_presence_of_element(String object) {
-        boolean elementPresence = false;
-        world.baseComps.waitForElement(By.xpath("(//div[@class='m-plp__filterSection '] /div[@class='plp-filter-options active'])[6]"));
-
-        if(object.equalsIgnoreCase("price section")){
-            elementPresence = world.resultsPage.isElementPresent(world.resultsLoc.priceFilters);
-        } else if(object.equalsIgnoreCase("all sizes button")){
-            elementPresence = world.resultsPage.isElementPresent(world.resultsLoc.showAllSizesBtn);
-        }
-        Assert.assertTrue(elementPresence);
-    }
-
-    @When("I click on {string} filter checkbox and validate is checked")
-    public void i_check_on_numInches_filter(String numInches){
-        WebElement check = world.resultsPage.iterateOnListAndCheck(world.resultsLoc.sizeCheckboxes,
-                "div > label", "div > div > input", numInches);
-
-        Assert.assertTrue(check.isSelected());
-    }
-
-    @When("I click on {string} filter on {string}")
-    public void i_click_on_filter(String sectionFilter, String filterName){
-        if(sectionFilter.equalsIgnoreCase("prices")){
-            world.resultsPage.iterateOnListAndCheck(world.resultsLoc.priceRanges, "label", "input", filterName);
-        }
-    }
-
-    @Then("I validate product results number is less or equal than {int}")
-    public void i_validate_products_results_number_amount(int number){
-        String totalProductsTxt = world.resultsLoc.totalProductLbl.getText().split(" ")[0];
-        int numProductsTxt = Integer.parseInt(totalProductsTxt);
-
-        Assert.assertTrue(numProductsTxt <= number);
-    }
-
-    @When("I hover on element with text {string}")
-    public void i_hover_and_click_on_element(String elementName){
-        if(elementName.equalsIgnoreCase("categorías")){
-            world.resultsPage.iterateOnListAndHover(world.resultsLoc.mainDivsSections, "li > span",elementName);
-        } else if(elementName.equalsIgnoreCase("belleza")){
-            world.resultsPage.iterateOnListAndHover(world.resultsLoc.categoriesSections, "li",elementName);
-        }
-    }
-
-    @When("^I sort products by \"([^\"]*)\"$")
-    public void i_sort_products_by_string(String sortBy){
-        world.resultsPage.sortBy(sortBy);
-    }
-
-    @When("^I iterate and click on element (.+) from list")
-    public void i_iterate_and_click_on_element_from_list(String perfume){
-        if(perfume.equals("DIOR")){
-            world.resultsPage.iterateOnList();
-        }
-    }
-
 }

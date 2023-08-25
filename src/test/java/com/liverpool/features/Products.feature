@@ -12,7 +12,7 @@ Feature: Multiple product list on Liverpool webpage
       When validate the amount of products is greater than 1
       And I click on the first product with name "PlayStation 5 825 GB"
       When I validate using "css" with locator "div[class='product-header-container liverpool'] > h1" is being displayed
-      And validate product "name" txt is equal to "Consola PlayStation 5 825 GB ds"
+      And validate product "name" txt is equal to "Consola PlayStation 5 825 GB"
       Then validate product "price" txt is equal to "$12,999"
       And I close my browser
 

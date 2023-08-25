@@ -1,6 +1,7 @@
 package com.liverpool.step_definitions;
 
 import com.liverpool.helpers.World;
+import com.liverpool.page_object.locators.ProductsLoc;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.*;
@@ -12,6 +13,7 @@ public class ProductsSteps {
 
     public ProductsSteps(World world){
         this.world = world;
+        this.world.productsLoc = new ProductsLoc(world.driver);
     }
 
     @When("I validate using {string} with locator {string} is being displayed")

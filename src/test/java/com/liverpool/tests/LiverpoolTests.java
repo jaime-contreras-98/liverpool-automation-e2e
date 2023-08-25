@@ -36,18 +36,20 @@ public class LiverpoolTests {
 
     @BeforeTest
     public void beforeAllTests() throws IOException {
+        // init
         base = new BaseComponents(driver);
-        driver = base.initializeDriver();
-
+        driver = base.initializeDriver(); // init driver
         actions = new Actions(driver);
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
-        base.initializeTest("https://liverpool.com.mx");
+        base.initializeTest(Constants.URL);
 
+        // PAGES
         indexLoc = new IndexLoc(driver);
         resultsLoc = new ResultsLoc(driver);
         productsLoc = new ProductsLoc(driver);
 
+        // LOCATORS
         indexPage = new IndexPage(driver);
         resultsPage = new ResultsPage(driver);
     }
@@ -56,8 +58,8 @@ public class LiverpoolTests {
     public void liverpoolTest1(){
         indexPage.searchProduct(Constants.PS, resultsLoc.resultsProductsLbl);
 
-        int totalPs5Products = resultsPage.iterateInList(resultsLoc.productElements, Constants.PS5[0], Constants.PS5[1]);
-        Assert.assertTrue(totalPs5Products >= 1);
+        int totalPs5Products = resultsPage.iterateInList(resultsLoc.productsNameList, Constants.PS5[0], Constants.PS5[1]);
+        Assert.assertTrue(totalPs5Products >= Constants.minimumAvailableProducts);
 
         List<WebElement> ps5Elements = driver.findElements(resultsLoc.getPs5Elements);
         resultsPage.iterateListAndClickOnElement(ps5Elements, Constants.PS5[2]);
@@ -78,33 +80,33 @@ public class LiverpoolTests {
 
         resultsLoc.showAllSizesBtn.click();
 
-        WebElement check = resultsPage.iterateOnListAndCheck(resultsLoc.sizeCheckboxes, "div > label", "div > div > input", "55 pulgadas");
+        WebElement check = resultsPage.iterateOnListAndCheck(resultsLoc.sizeCheckboxesList, "div > label", "div > div > input", Constants.SIZE);
         Assert.assertTrue(check.isSelected());
 
         actions.pause(4000).perform(); //fluentwait
 
-        resultsPage.iterateOnListAndCheck(resultsLoc.priceRanges, "label", "input", "Menos de $1000000.0");
+        resultsPage.iterateOnListAndCheck(resultsLoc.priceRangesList, "label", "input", Constants.PRICE);
 
-        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector("div[class='o-aside d-aside--margin'] > div:nth-child(26)  div[class*='m-radioButton']")));
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(resultsLoc.priceCheckboxesSection));
 
-        String totalProductsTxt = resultsLoc.totalProductLbl.getText().split(" ")[0];
+        String totalProductsTxt = resultsLoc.totalProductsLbl.getText().split(" ")[0];
         int numProductsTxt = Integer.parseInt(totalProductsTxt);
 
-        Assert.assertTrue(numProductsTxt <= 15);
+        Assert.assertTrue(numProductsTxt <= Constants.minimumAvailableTVs);
     }
 
     @Test
     public void liverpoolTest3() {
-        resultsPage.iterateOnListAndHover(resultsLoc.mainDivsSections, "li > span","Categorías");
-        resultsPage.iterateOnListAndHover(resultsLoc.categoriesSections, "li","Belleza");
-        resultsPage.iterateListAndClickOnElement(resultsLoc.bellezaItemsList, "Perfumes Hombre");
+        resultsPage.iterateOnListAndHover(resultsLoc.mainDivsSectionsList, "li > span",Constants.CATEGORY);
+        resultsPage.iterateOnListAndHover(resultsLoc.categoriesSectionsList, "li",Constants.BEAUTY);
+        resultsPage.iterateListAndClickOnElement(resultsLoc.bellezaItemsList, Constants.MEN_FRAGRANCE);
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(resultsLoc.menPerfumeLbl));
 
         String perfumesLbl = driver.findElement(resultsLoc.menPerfumeLbl).getText();
         Assert.assertEquals(perfumesLbl , Constants.MEN_FRAGRANCE);
 
-        resultsPage.sortBy("Relevancia");
+        resultsPage.sortBy(Constants.FILTERS[0]);
 
         actions.pause(2000).perform();
         resultsLoc.showMoreMarcasBtn.click();

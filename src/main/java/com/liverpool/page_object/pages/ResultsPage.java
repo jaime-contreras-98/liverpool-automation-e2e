@@ -2,7 +2,6 @@ package com.liverpool.page_object.pages;
 
 import com.liverpool.data.Constants;
 import com.liverpool.helpers.BaseComponents;
-import com.liverpool.page_object.locators.ProductsLoc;
 import com.liverpool.page_object.locators.ResultsLoc;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
@@ -14,18 +13,18 @@ public class ResultsPage extends BaseComponents {
     WebDriver driver;
     Actions actions;
     ResultsLoc resultsLoc;
-    ProductsLoc productsLoc;
 
     public ResultsPage (WebDriver driver){
         super(driver);
+
         this.driver = driver;
         this.actions = new Actions(driver);
         this.resultsLoc = new ResultsLoc(driver);
-        this.productsLoc = new ProductsLoc(driver);
     }
 
     public void sortBy(String buttonName){
         resultsLoc.sortByBtn.click();
+
         driver.findElement(By.xpath("//main[@class='col-lg-9 m-column_mainContent'] //button[contains(text(),'" + buttonName + "')]")).click();
     }
 
@@ -91,7 +90,6 @@ public class ResultsPage extends BaseComponents {
             }
         }
     }
-
     /*
     public String numberOfArticles() {
         String txt = "";
@@ -108,13 +106,4 @@ public class ResultsPage extends BaseComponents {
     }
      */
 
-    public boolean isElementPresent(WebElement elementDisplayed) {
-         boolean isElementPresent = false;
-
-         if(elementDisplayed.isDisplayed()){
-             isElementPresent = true;
-         }
-
-         return isElementPresent;
-    }
 }
